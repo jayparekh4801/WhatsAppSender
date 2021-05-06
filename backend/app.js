@@ -41,10 +41,24 @@ app.post('/signUp', (req, res) => {
                     });
                 }
                 else {
-                    res.send({
-                        success : true,
-                        message : "Registered Successfully",
-                        data : null
+                    let userMessages = new UserMessage();
+                    userMessages.userName = req.body.userName;
+                    userMessages.messages = [];
+                    userMessages.save((err, success) => {
+                        if(err) {
+                            es.send({
+                                success : false,
+                                message : "Not Registered Yet, Please Register Again",
+                                data : err
+                            });
+                        }
+                        else {
+                            res.send({
+                                success : true,
+                                message : "Registered Successfully",
+                                data : null
+                            });
+                        }
                     });
                 }
             });
@@ -56,15 +70,7 @@ app.post('/signUp', (req, res) => {
 
 app.post("/logIn", (req, res) => {
     User.findOne({userName : req.body.userName, password : req.body.password}, (err, success) => {
-        if(err) {
-            r
-            res.send({
-                success : false,
-                message : "User Not Registered",
-                data : err
-            })
-        }
-        else {
+        if(success){
             res.send({
                 success : true,
                 message : "SignUp Successfully",
@@ -72,7 +78,15 @@ app.post("/logIn", (req, res) => {
                     userName : success.userName,
                     email : success.email
                 }
-            }); 
+            });
+            
+        }
+        else {
+            res.send({
+                success : false,
+                message : "User Not Registered",
+                data : err
+            })
         }
     })
 })
