@@ -1,6 +1,7 @@
 // whatsapp://send?text=hi1
 
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 const User = require('./userDetails');
 const UserMessage = require('./messages');
@@ -27,6 +28,7 @@ app.post('/signUp', (req, res) => {
         }
         else {
             let user = new User()
+            user.email = req.body.email;
             user.userName = req.body.userName;
             user.password = req.body.password;
             user.save((err, success) => {
@@ -49,3 +51,6 @@ app.post('/signUp', (req, res) => {
     });
 });
 
+app.listen(port, () => {
+    console.log(`server is start on ${port}`);
+});
