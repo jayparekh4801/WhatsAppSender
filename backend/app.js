@@ -17,6 +17,7 @@ app.use(cors({ origin: 'http://localhost:4200', optionsSuccessStatus: 200 }));
 
 mongoose.connect('mongodb://localhost/WhatsAppSender', { useNewUrlParser: true, useUnifiedTopology: true });
 
+// SignUp End Point
 app.post('/signUp', (req, res) => {
     User.findOne({userName : req.body.userName}, (err, success) => {
         if(success) {
@@ -51,6 +52,30 @@ app.post('/signUp', (req, res) => {
     });
 });
 
+// LogIn End Point
+
+app.post("/logIn", (req, res) => {
+    User.findOne({userName : req.body.userName, password : req.body.password}, (err, success) => {
+        if(err) {
+            r
+            res.send({
+                success : false,
+                message : "User Not Registered",
+                data : err
+            })
+        }
+        else {
+            res.send({
+                success : true,
+                message : "SignUp Successfully",
+                data : {
+                    userName : success.userName,
+                    email : success.email
+                }
+            }); 
+        }
+    })
+})
 app.listen(port, () => {
     console.log(`server is start on ${port}`);
 });
