@@ -1,4 +1,4 @@
-body{margin-top:20px;
+/* body{margin-top:20px;
     background:#eee;
     }
     
@@ -175,4 +175,13 @@ body{margin-top:20px;
       .member-entry .member-details .info-list > div {
         margin-top: 10px;
       }
-    }
+    } */
+
+    /* nav ul{height:200px; width:18%;}
+nav ul{overflow:hidden; overflow-y:scroll;} */
+
+#message-container {
+  background-color: lightblue;
+  width: 40%;
+  overflow: scroll;
+}
