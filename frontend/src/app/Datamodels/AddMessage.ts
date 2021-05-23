@@ -1,4 +1,5 @@
 export interface AddMessage {
-    title : String,
-    message : String
+    title : string,
+    message : string,
+    link : string
 }

@@ -117,12 +117,32 @@ app.post('/addMessage', authenticateToken, (req, res) => {
         else {
             res.send({
                 success : true,
-                messge : "Message Added Successfully",
+                message : "Message Added Successfully",
                 data : null
             });
         }
     });
 });
+
+// get Messages endpoint
+app.get('/getMessages', authenticateToken, (req, res) => {
+    UserMessage.findOne({userName : req.user.userName}, (err, success) => {
+        if(err) {
+            res.send({
+                success : "false",
+                message : "messges not found",
+                data : err
+            });
+        }
+        else {
+            res.send ({
+                success : "true",
+                message : "Messages Found",
+                data : success.messages
+            })
+        }
+    })
+})
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']

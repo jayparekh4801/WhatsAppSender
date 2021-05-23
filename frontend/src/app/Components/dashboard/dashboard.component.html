@@ -1,4 +1,3 @@
-<!-- <a href="whatsapp://send?text=hi">tap for say hi</a> -->
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
 <main>
@@ -111,7 +110,7 @@
                 </div>
                 <!-- Post /////-->
                 <!--- \\\\\\\Post-->
-                <div class="card social-timeline-card">
+                <div class="card social-timeline-card" *ngFor = "let message of savedMessages">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
@@ -119,8 +118,10 @@
                                     <img class="rounded-circle" width="45" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                                 </div> -->
                                 <div class="ml-2">
-                                    <div class="h5 m-0 text-blue">@JaneSmith</div>
-                                    <div class="h7 text-muted">Miracles Lee Cross</div>
+                                    <div class="h5 m-0 text-blue">
+                                        {{message.title}}
+                                    </div>
+                                    <!-- <div class="h7 text-muted">Miracles Lee Cross</div> -->
                                 </div>
                             </div>
                             <!-- <div>
@@ -140,16 +141,19 @@
                     </div>
                     <div class="card-body">
                         <!-- <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div> -->
-                        <a class="card-link" href="#">
-                            <h5 class="card-title">Lorem ipsum dolor sit amet, consectetur adip.</h5>
-                        </a>
+                        <!-- <a class="card-link" href="#"> -->
+                            <h5 class="card-title">
+                                {{message.message}}
+                            </h5>
+                        <!-- </a> -->
                         <!-- <img src="img/gallery/1a.jpg" alt="" class="img-fluid"> -->
 
                     </div>
                     <div class="card-footer">
                         <!-- <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
                         <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a> -->
-                        <a href="#" class="card-link text-primary"><i class="fa fa-mail-forward"></i> Send</a>
+                        <!-- <a > jhjhjh</a> -->
+                        <a [href] = urlSanitizer(message.link) class="card-link text-primary"><i class="fa fa-mail-forward"></i> Send</a>
                     </div>
                 </div>
                 <!-- Post /////-->
