@@ -23,9 +23,9 @@ export class LogInComponent implements OnInit {
 
 	logIn() {
 		this.logInService.logIn(this.logInData).subscribe((data : any) => {
+			console.log(data)
 			if(data.success) {
-				localStorage.setItem("userName", data.data.userName);
-				localStorage.setItem("email", data.data.email);
+				localStorage.setItem("accessToken", data.accessToken);
 				this.router.navigate(['/dashBoard']);
 			}
 			else {
