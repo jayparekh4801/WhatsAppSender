@@ -102,7 +102,27 @@ app.post("/logIn", (req, res) => {
 
 app.post('/addMessage', authenticateToken, (req, res) => {
     console.log("perfect")
-})
+    UserMessage.updateOne({userName : req.user.userName}, {
+        $push : {
+            messages : req.body
+        }
+    }, (err, success) => {
+        if(err) {
+            res.send({
+                success : false,
+                messge : "Error With Updting Database",
+                data : err
+            });
+        }
+        else {
+            res.send({
+                success : true,
+                messge : "Message Added Successfully",
+                data : null
+            });
+        }
+    });
+});
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
