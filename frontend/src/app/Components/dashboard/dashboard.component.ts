@@ -21,6 +21,11 @@ export class DashboardComponent implements OnInit {
 
 	savedMessages : AddMessage[];
 
+	// update message vars
+
+	updateMessageBool : boolean = false;
+	updateMessage : string = "";
+
 	ngOnInit(): void {
 		this.dashboardService.getMessages().subscribe((data : any) => {
 			this.savedMessages = data.data
@@ -53,6 +58,11 @@ export class DashboardComponent implements OnInit {
 				Swal.fire("WhatsAppSender", data.message, "warning");
 			}
 		})
+	}
+
+	update(message : any) {
+		this.updateMessageBool = true;
+		this.updateMessage = message;
 	}
 
 	urlSanitizer(url : any) {
