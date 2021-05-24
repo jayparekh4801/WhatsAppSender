@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddMessage } from 'src/app/Datamodels/AddMessage';
 import { DashboardService } from 'src/app/Services/dashboardServices/dashboard.service';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-dashboard',
@@ -33,7 +34,24 @@ export class DashboardComponent implements OnInit {
 		this.newMessage.title = prompt("Enter Title Of Message");
 		this.newMessage.link = this.newMessage.link + this.newMessage.message;
 		this.dashboardService.createMessage(this.newMessage).subscribe((data : any) => {
-			console.log(data)
+			if(data.success) {
+				window.location.reload()
+			}
+			else {
+				Swal.fire("WhatsAppSender", data.message, "warning");
+			}
+			
+		});
+	}
+
+	deleteMessage(title : any) {
+		this.dashboardService.deleteMessage(title).subscribe((data : any) => {
+			if(data.success) {
+				window.location.reload()
+			}
+			else {
+				Swal.fire("WhatsAppSender", data.message, "warning");
+			}
 		})
 	}
 

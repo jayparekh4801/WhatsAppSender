@@ -101,27 +101,39 @@ app.post("/logIn", (req, res) => {
 // add Message endpoint
 
 app.post('/addMessage', authenticateToken, (req, res) => {
-    console.log("perfect")
-    UserMessage.updateOne({userName : req.user.userName}, {
-        $push : {
-            messages : req.body
+    UserMessage.findOne({userName : req.user.userName}, {messages : 1, _id : 0}, (err, success) => {
+        let messages = success.messages;
+        for (message of messages) {
+            if(message['title'] == req.body.title) {
+                return res.send({
+                    success : false,
+                    message : "Message Names Should Be Unique",
+                    data : null
+                });
+            }
         }
-    }, (err, success) => {
-        if(err) {
-            res.send({
-                success : false,
-                messge : "Error With Updting Database",
-                data : err
-            });
-        }
-        else {
-            res.send({
-                success : true,
-                message : "Message Added Successfully",
-                data : null
-            });
-        }
-    });
+        UserMessage.updateOne({userName : req.user.userName}, {
+            $push : {
+                messages : req.body
+            }
+        }, (err, success) => {
+            if(err) {
+                res.send({
+                    success : false,
+                    messge : "Error With Updting Database",
+                    data : err
+                });
+            }
+            else {
+                res.send({
+                    success : true,
+                    message : "Message Added Successfully",
+                    data : null
+                });
+            }
+        });
+    })
+    
 });
 
 // get Messages endpoint
@@ -139,10 +151,36 @@ app.get('/getMessages', authenticateToken, (req, res) => {
                 success : "true",
                 message : "Messages Found",
                 data : success.messages
+            });
+        }
+    });
+});
+
+// delete message endpoint
+app.get('/deleteMessage', authenticateToken, (req, res) => {
+    UserMessage.updateOne({userName : req.user.userName}, {
+        $pull : {
+            messages : {
+                title : req.headers['title']
+            }
+        }
+    }, (err, success) => {
+        if(err) {
+            res.send({
+                success : false, 
+                message : "Message Is Not Deleted. Please Try Again!",
+                data : err
+            })
+        }
+        else {
+            res.send({
+                success : true,
+                message : "Message Deleted Succefully",
+                data : null
             })
         }
     })
-})
+});
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']

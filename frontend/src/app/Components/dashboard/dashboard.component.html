@@ -150,10 +150,10 @@
 
                     </div>
                     <div class="card-footer">
-                        <!-- <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a> -->
-                        <!-- <a > jhjhjh</a> -->
                         <a [href] = urlSanitizer(message.link) class="card-link text-primary"><i class="fa fa-mail-forward"></i> Send</a>
+                        <span class="card-link" style="cursor: pointer;" (click) = "deleteMessage(message.title)"><i class="fa fa-trash-alt"></i> Delete</span>
+                        <a href="#" class="card-link"><i class="fa fa-pen-alt"></i> Update</a>
+                        <!-- <a > jhjhjh</a> -->
                     </div>
                 </div>
                 <!-- Post /////-->
