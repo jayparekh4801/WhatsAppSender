@@ -129,7 +129,7 @@
                     <div class="card-footer">
                         <a [href] = urlSanitizer(message.link) class="card-link text-primary"><i class="fa fa-mail-forward"></i> Send</a>
                         <span class="card-link" style="cursor: pointer;" (click) = "deleteMessage(message.title)"><i class="fa fa-trash-alt"></i> Delete</span>
-                        <span class="card-link" style="cursor: pointer;" (click) = "update(message.message)"><i class="fa fa-pen-alt"></i> Update</span>
+                        <span class="card-link" style="cursor: pointer;" (click) = "update(message)"><i class="fa fa-pen-alt"></i> Update</span>
                         <!-- <a > jhjhjh</a> -->
                     </div>
                 </div>
@@ -165,7 +165,8 @@
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="myTabu" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="posts-tabu" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Update Message Here</a>
+                                <!-- <a class="nav-link active" id="posts-tabu" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">{{updateMessage.title}}</a> -->
+                                <input type = "text" class="nav-link active" id="posts-tabu" data-toggle="tab" role="tab" aria-controls="posts" aria-selected="true" [(ngModel)] = "updateMessage.title">
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">Share Images</a>
@@ -177,7 +178,7 @@
                             <div class="tab-pane fade active show" id="postsu" role="tabpanel" aria-labelledby="posts-tab">
                                 <div class="form-group">
                                     <label class="sr-only" for="message">post</label>
-                                    <textarea class="form-control" id="messageu" rows="3" placeholder="What are you thinking?" [(ngModel)] = "updateMessage"></textarea>
+                                    <textarea class="form-control" id="messageu" rows="3" placeholder="What are you thinking?" [(ngModel)] = "updateMessage.message"></textarea>
                                 </div>
                             </div>
                             <!-- <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
@@ -191,7 +192,7 @@
                             </div> -->
                         </div>
                         <div class="btn-toolbar justify-content-between">
-                            <div class="btn-group" (click) = "updateMessage()">
+                            <div class="btn-group" (click) = "updatedMessage()">
                                 <button type="submit" class="btn btn-theme-primary text-primary">Update</button>
                             </div>
                             <!-- <div class="btn-group">

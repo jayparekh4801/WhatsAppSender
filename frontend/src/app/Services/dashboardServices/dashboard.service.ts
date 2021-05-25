@@ -27,4 +27,10 @@ export class DashboardService {
 		return this.http.get('http://localhost:8000/deleteMessage', {headers : header});
 	}
 
+	updatedMessge(data : any) {
+		let header = new HttpHeaders();
+		header = header.set('authorization', "Bearer " + localStorage.getItem('accessToken'));
+		return this.http.post('http://localhost:8000/updateMessage', data, {headers : header});
+	}
+
 }

@@ -24,12 +24,12 @@ mongoose.connect('mongodb://localhost/WhatsAppSender', { useNewUrlParser: true, 
 
 // SignUp End Point
 app.post('/signUp', (req, res) => {
-    User.findOne({userName : req.body.userName}, (err, success) => {
-        if(success) {
+    User.findOne({ userName: req.body.userName }, (err, success) => {
+        if (success) {
             res.send({
-                success : false,
-                message : "User Is Already Exist",
-                data : null
+                success: false,
+                message: "User Is Already Exist",
+                data: null
             });
         }
         else {
@@ -38,11 +38,11 @@ app.post('/signUp', (req, res) => {
             user.userName = req.body.userName;
             user.password = req.body.password;
             user.save((err, success) => {
-                if(err) {
+                if (err) {
                     res.send({
-                        success : false,
-                        message : "Not Registered Yet, Please Register Again",
-                        data : err
+                        success: false,
+                        message: "Not Registered Yet, Please Register Again",
+                        data: err
                     });
                 }
                 else {
@@ -50,18 +50,18 @@ app.post('/signUp', (req, res) => {
                     userMessages.userName = req.body.userName;
                     userMessages.messages = [];
                     userMessages.save((err, success) => {
-                        if(err) {
+                        if (err) {
                             es.send({
-                                success : false,
-                                message : "Not Registered Yet, Please Register Again",
-                                data : err
+                                success: false,
+                                message: "Not Registered Yet, Please Register Again",
+                                data: err
                             });
                         }
                         else {
                             res.send({
-                                success : true,
-                                message : "Registered Successfully",
-                                data : null
+                                success: true,
+                                message: "Registered Successfully",
+                                data: null
                             });
                         }
                     });
@@ -72,85 +72,83 @@ app.post('/signUp', (req, res) => {
 });
 
 // LogIn End Point
-
 app.post("/logIn", (req, res) => {
-    User.findOne({userName : req.body.userName, password : req.body.password}, (err, success) => {
-        if(success){
+    User.findOne({ userName: req.body.userName, password: req.body.password }, (err, success) => {
+        if (success) {
             userName = req.body.userName
             user = {
-                userName : userName
+                userName: userName
             }
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
             res.send({
-                success : true,
-                message : "SignUp Successfully",
-                accessToken : accessToken
+                success: true,
+                message: "SignUp Successfully",
+                accessToken: accessToken
             });
-            
+
         }
         else {
             res.send({
-                success : false,
-                message : "User Not Registered",
-                data : err
+                success: false,
+                message: "User Not Registered",
+                data: err
             });
         }
     });
 });
 
 // add Message endpoint
-
 app.post('/addMessage', authenticateToken, (req, res) => {
-    UserMessage.findOne({userName : req.user.userName}, {messages : 1, _id : 0}, (err, success) => {
+    UserMessage.findOne({ userName: req.user.userName }, { messages: 1, _id: 0 }, (err, success) => {
         let messages = success.messages;
         for (message of messages) {
-            if(message['title'] == req.body.title) {
+            if (message['title'] == req.body.title) {
                 return res.send({
-                    success : false,
-                    message : "Message Names Should Be Unique",
-                    data : null
+                    success: false,
+                    message: "Message Names Should Be Unique",
+                    data: null
                 });
             }
         }
-        UserMessage.updateOne({userName : req.user.userName}, {
-            $push : {
-                messages : req.body
+        UserMessage.updateOne({ userName: req.user.userName }, {
+            $push: {
+                messages: req.body
             }
         }, (err, success) => {
-            if(err) {
+            if (err) {
                 res.send({
-                    success : false,
-                    messge : "Error With Updting Database",
-                    data : err
+                    success: false,
+                    messge: "Error With Updting Database",
+                    data: err
                 });
             }
             else {
                 res.send({
-                    success : true,
-                    message : "Message Added Successfully",
-                    data : null
+                    success: true,
+                    message: "Message Added Successfully",
+                    data: null
                 });
             }
         });
     })
-    
+
 });
 
 // get Messages endpoint
 app.get('/getMessages', authenticateToken, (req, res) => {
-    UserMessage.findOne({userName : req.user.userName}, (err, success) => {
-        if(err) {
+    UserMessage.findOne({ userName: req.user.userName }, (err, success) => {
+        if (err) {
             res.send({
-                success : "false",
-                message : "messges not found",
-                data : err
+                success: "false",
+                message: "messges not found",
+                data: err
             });
         }
         else {
-            res.send ({
-                success : "true",
-                message : "Messages Found",
-                data : success.messages
+            res.send({
+                success: "true",
+                message: "Messages Found",
+                data: success.messages
             });
         }
     });
@@ -158,36 +156,85 @@ app.get('/getMessages', authenticateToken, (req, res) => {
 
 // delete message endpoint
 app.get('/deleteMessage', authenticateToken, (req, res) => {
-    UserMessage.updateOne({userName : req.user.userName}, {
-        $pull : {
-            messages : {
-                title : req.headers['title']
+    UserMessage.updateOne({ userName: req.user.userName }, {
+        $pull: {
+            messages: {
+                title: req.headers['title']
             }
         }
     }, (err, success) => {
-        if(err) {
+        if (err) {
             res.send({
-                success : false, 
-                message : "Message Is Not Deleted. Please Try Again!",
-                data : err
+                success: false,
+                message: "Message Is Not Deleted. Please Try Again!",
+                data: err
             })
         }
         else {
             res.send({
-                success : true,
-                message : "Message Deleted Succefully",
-                data : null
-            })
+                success: true,
+                message: "Message Deleted Succefully",
+                data: null
+            });
         }
-    })
+    });
 });
+
+// update Message endpoint
+app.post('/updateMessage', authenticateToken, (req, res) => {
+    console.log(req.body)
+    UserMessage.updateOne({ userName: req.user.userName }, {
+        $pull: {
+            messages: {
+                title: req.body.oldtitle
+            }
+        }
+    }, (err, success) => {
+        if (err) {
+            console.log(success)
+            return res.send({
+                success: false,
+                message: "Meessage Is Not Updated",
+                data: err
+            });
+        }
+        else {
+            UserMessage.updateOne({ userName: req.user.userName }, {
+                $push: {
+                    messages: {
+                        title: req.body.title,
+                        message: req.body.message,
+                        link: req.body.link
+                    }
+                }
+            }, (err, success) => {
+                if (err) {
+                    console.log(success)
+                    res.send({
+                        success: false,
+                        message: "Meessage Is Not Updated",
+                        data: err
+                    });
+                }
+                else {
+                    console.log(success)
+                    res.send({
+                        success: true,
+                        message: "Message Updated Successfully",
+                        data: null
+                    });
+                }
+            });
+        }
+    });
+})
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
-    if(authHeader) {
+    if (authHeader) {
         const token = authHeader.split(' ')[1]
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-            if(err) {
+            if (err) {
                 return res.sendStatus(403);
             }
             else {
@@ -200,7 +247,7 @@ function authenticateToken(req, res, next) {
     else {
         return res.sendStatus(401);
     }
-    
+
 
 }
 

@@ -24,7 +24,13 @@ export class DashboardComponent implements OnInit {
 	// update message vars
 
 	updateMessageBool : boolean = false;
-	updateMessage : string = "";
+
+	updateMessage : any = {
+		oldtitle : "",
+		title : "",
+		message : "",
+		link : "whatsapp://send?text="
+	};
 
 	ngOnInit(): void {
 		this.dashboardService.getMessages().subscribe((data : any) => {
@@ -62,8 +68,20 @@ export class DashboardComponent implements OnInit {
 
 	update(message : any) {
 		this.updateMessageBool = true;
-		this.updateMessage = message;
+		this.updateMessage.oldtitle = message.title
+		this.updateMessage.title = message.title;
+		this.updateMessage.message = message.message;
 	}
+
+	updatedMessage() {
+		this.updateMessage.link = this.updateMessage.link + this.updateMessage.message
+		this.dashboardService.updatedMessge(this.updateMessage).subscribe((data : any) => {
+			if(data.success) {
+				window.location.reload()
+			}
+		})
+		
+	}	
 
 	urlSanitizer(url : any) {
 		return this.sanitizer.bypassSecurityTrustUrl(url);
